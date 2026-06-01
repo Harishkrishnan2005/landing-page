@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: #f8f6f1;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.input-field {
+  border-radius: 1rem;
+  border: 1px solid #d6d3d1;
+  background: #fafaf9;
+  padding: 0.95rem 1rem;
+  color: #0f172a;
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: #f59e0b;
+}
+
+.input-field-dark {
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.7);
+  padding: 0.95rem 1rem;
+  color: white;
+  outline: none;
+}
+
+.input-field-dark::placeholder {
+  color: #94a3b8;
+}
+
+.input-field-dark:focus {
+  border-color: #fcd34d;
+}
