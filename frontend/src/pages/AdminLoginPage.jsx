@@ -3,9 +3,11 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { LockKeyhole, Mail } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
+import { useBackendStatus } from '../hooks/useBackendStatus'
 
 function AdminLoginPage() {
   const { login } = useAuth()
+  const { backendReady, checkingBackend } = useBackendStatus()
   const navigate = useNavigate()
   const location = useLocation()
   const [form, setForm] = useState({ email: '', password: '' })
@@ -13,6 +15,11 @@ function AdminLoginPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+    if (!backendReady) {
+      toast.info('Server is still starting. Please wait a moment before signing in.')
+      return
+    }
+
     try {
       setSubmitting(true)
       await login(form)
@@ -42,8 +49,8 @@ function AdminLoginPage() {
           <input type="password" className="input-field-dark" name="password" value={form.password} onChange={(event) => setForm((prev) => ({ ...prev, password: event.target.value }))} />
         </label>
 
-        <button type="submit" disabled={submitting} className="mt-6 w-full rounded-full bg-amber-400 px-6 py-4 font-semibold text-slate-950 transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-60">
-          {submitting ? 'Signing in...' : 'Login'}
+        <button type="submit" disabled={submitting || checkingBackend || !backendReady} className="mt-6 w-full rounded-full bg-amber-400 px-6 py-4 font-semibold text-slate-950 transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-60">
+          {submitting || checkingBackend ? 'Signing in...' : 'Login'}
         </button>
       </form>
     </div>

@@ -7,8 +7,22 @@ import AppointmentsPage from './pages/AppointmentsPage'
 import ProfilePage from './pages/ProfilePage'
 import NotFoundPage from './pages/NotFoundPage'
 import ProtectedRoute from './components/admin/ProtectedRoute'
+import { useBackendStatus } from './hooks/useBackendStatus'
+import LoadingScreen from './components/shared/LoadingScreen'
 
 function App() {
+  const { backendReady, checkingBackend } = useBackendStatus()
+
+  if (checkingBackend && !backendReady) {
+    return (
+      <LoadingScreen
+        message="Starting server, please wait..."
+        detail="This may take up to 60 seconds on the first visit."
+        showLogo
+      />
+    )
+  }
+
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />

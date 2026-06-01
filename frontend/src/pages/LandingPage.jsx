@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import { toast } from 'react-toastify'
 import api from '../lib/api'
+import { useBackendStatus } from '../hooks/useBackendStatus'
 import LoadingScreen from '../components/shared/LoadingScreen'
 
 const businessEmail = import.meta.env.VITE_BUSINESS_EMAIL || 'partnerships@vertexwholesale.com'
@@ -195,6 +196,7 @@ function AnimatedCounter({ label, value }) {
 }
 
 function LandingPage() {
+  const { backendReady, checkingBackend } = useBackendStatus()
   const [loading, setLoading] = useState(true)
   const [activeSection, setActiveSection] = useState('home')
   const [menuOpen, setMenuOpen] = useState(false)
@@ -240,6 +242,11 @@ function LandingPage() {
   }
 
   const handleSubmit = async (type) => {
+    if (!backendReady) {
+      toast.info('Server is still starting. Please wait before submitting your request.')
+      return
+    }
+
     const payload = type === 'appointment' ? appointment : contact
     const setter = type === 'appointment' ? setAppointment : setContact
     const url = type === 'appointment' ? '/appointments' : '/contacts'
@@ -637,10 +644,10 @@ function LandingPage() {
               />
               <button
                 type="submit"
-                disabled={submitting.appointment}
+                disabled={submitting.appointment || checkingBackend || !backendReady}
                 className="rounded-full bg-amber-400 px-6 py-4 font-semibold text-slate-950 transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-60 md:col-span-2"
               >
-                {submitting.appointment ? 'Submitting...' : 'Book Appointment'}
+                {submitting.appointment || checkingBackend ? 'Submitting...' : 'Book Appointment'}
               </button>
             </form>
           </div>
@@ -723,10 +730,10 @@ function LandingPage() {
               />
               <button
                 type="submit"
-                disabled={submitting.contact}
+                disabled={submitting.contact || checkingBackend || !backendReady}
                 className="w-full rounded-full bg-amber-400 px-5 py-4 text-sm font-semibold text-slate-950 transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-60 sm:px-6 sm:text-base"
               >
-                {submitting.contact ? 'Sending...' : 'Submit Contact Request'}
+                {submitting.contact || checkingBackend ? 'Sending...' : 'Submit Contact Request'}
               </button>
             </form>
           </div>

@@ -2,6 +2,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
+import healthRoutes from './routes/health.js'
 import authRoutes from './routes/authRoutes.js'
 import publicRoutes from './routes/publicRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
@@ -58,6 +59,8 @@ app.use(express.urlencoded({ extended: true, limit: '200kb' }))
 app.use(cookieParser())
 app.use(sanitizeRequest)
 app.use(apiLimiter)
+
+app.use('/health', healthRoutes)
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
