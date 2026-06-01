@@ -9,6 +9,6 @@ export const verifyToken = (token) => jwt.verify(token, env.jwtSecret)
 export const cookieOptions = {
   httpOnly: true,
   secure: env.nodeEnv === 'production',
-  sameSite: 'lax',
+  sameSite: env.nodeEnv === 'production' ? 'none' : 'lax',
   maxAge: env.cookieMaxAge,
 }

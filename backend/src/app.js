@@ -19,14 +19,14 @@ const app = express()
 app.use(
   cors({
     origin(origin, callback) {
-      const whitelist = [env.frontendUrl]
+      const whitelist = env.frontendUrls
       if (!origin || whitelist.includes(origin)) {
         return callback(null, true)
       }
       return callback(new ApiError(403, 'Origin not allowed by CORS'))
     },
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   }),
 )
 
